@@ -29,6 +29,21 @@ public class IdeLightClassTestGenerated extends AbstractIdeLightClassTest {
         KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/asJava/lightClasses"), Pattern.compile("^([^.]+)\\.(kt|kts)$"), TargetBackend.ANY, true, "delegation");
     }
 
+    @TestMetadata("AnnotatedParameterInEnumConstructor.kt")
+    public void testAnnotatedParameterInEnumConstructor() throws Exception {
+        runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInEnumConstructor.kt");
+    }
+
+    @TestMetadata("AnnotatedParameterInGenericInnerClassConstructor.kt")
+    public void testAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
+        runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInGenericInnerClassConstructor.kt");
+    }
+
+    @TestMetadata("AnnotatedParameterInInnerClassConstructor.kt")
+    public void testAnnotatedParameterInInnerClassConstructor() throws Exception {
+        runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInInnerClassConstructor.kt");
+    }
+
     @TestMetadata("AnnotationClass.kt")
     public void testAnnotationClass() throws Exception {
         runTest("compiler/testData/asJava/lightClasses/AnnotationClass.kt");
