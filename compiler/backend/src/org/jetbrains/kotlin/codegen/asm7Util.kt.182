@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.codegen
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 
 internal fun visitAnnotableParameterCount(mv: MethodVisitor, paramCount: Int) {
-    mv.visitAnnotableParameterCount(paramCount, true)
-    mv.visitAnnotableParameterCount(paramCount, false)
+    error("183 bunch file should be used for compilation")
+//    mv.visitAnnotableParameterCount(paramCount, true)
+//    mv.visitAnnotableParameterCount(paramCount, false)
 }
