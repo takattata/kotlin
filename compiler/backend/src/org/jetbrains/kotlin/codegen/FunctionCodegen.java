@@ -525,9 +525,20 @@ public class FunctionCodegen {
             if (kind.isSkippedInGenericSignature()) {
                 if (AsmUtil.IS_BUILT_WITH_ASM6) {
                     markEnumOrInnerConstructorParameterAsSynthetic(mv, i, state.getClassBuilderMode());
-                } else {
+                }
+                else {
                     syntheticParameterCount++;
                 }
+            }
+        }
+        if (!AsmUtil.IS_BUILT_WITH_ASM6) {
+            Asm7UtilKt.visitAnnotableParameterCount(mv, kotlinParameterTypes.size() - syntheticParameterCount);
+        }
+
+        for (int i = 0; i < kotlinParameterTypes.size(); i++) {
+            JvmMethodParameterSignature parameterSignature = kotlinParameterTypes.get(i);
+            JvmMethodParameterKind kind = parameterSignature.getKind();
+            if (kind.isSkippedInGenericSignature()) {
                 continue;
             }
 
@@ -544,9 +555,7 @@ public class FunctionCodegen {
                         .genAnnotations(annotated, parameterSignature.getAsmType());
             }
         }
-        if (!AsmUtil.IS_BUILT_WITH_ASM6 && syntheticParameterCount > 0) {
-            Asm7UtilKt.visitAnnotableParameterCount(mv, kotlinParameterTypes.size() - syntheticParameterCount);
-        }
+
     }
 
     private static void markEnumOrInnerConstructorParameterAsSynthetic(MethodVisitor mv, int i, ClassBuilderMode mode) {

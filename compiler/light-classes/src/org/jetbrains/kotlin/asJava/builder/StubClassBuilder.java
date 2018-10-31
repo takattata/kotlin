@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin;
 import org.jetbrains.org.objectweb.asm.ClassVisitor;
 import org.jetbrains.org.objectweb.asm.FieldVisitor;
 import org.jetbrains.org.objectweb.asm.MethodVisitor;
+import org.jetbrains.org.objectweb.asm.Opcodes;
 
 import java.util.List;
 
@@ -81,7 +82,11 @@ public class StubClassBuilder extends AbstractClassBuilder {
     ) {
         assert v == null : "defineClass() called twice?";
 
-        v = new StubBuildingVisitor<>(null, EMPTY_STRATEGY, parent, access, calculateShortName(name));
+        //noinspection ConstantConditions
+        v = new StubBuildingVisitor<>(Opcodes.API_VERSION <= Opcodes.ASM6
+                                      ? null
+                                      : "Passed to disable hack with synthetic parameter offset. Replace with 'null' after hack removing",
+                                      EMPTY_STRATEGY, parent, access, calculateShortName(name));
 
         super.defineClass(origin, version, access, name, signature, superName, interfaces);
 
