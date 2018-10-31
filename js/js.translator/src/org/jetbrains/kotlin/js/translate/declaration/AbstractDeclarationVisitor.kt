@@ -108,9 +108,7 @@ abstract class AbstractDeclarationVisitor : TranslatorVisitor<Unit>()  {
             inlineFunction.name = null
             inlineFunction.coroutineMetadata = null
             inlineFunction.isInlineableCoroutineBody = true
-            val metadata = InlineMetadata.compose(inlineFunction, descriptor, innerContext)
-            val functionWithMetadata = metadata.functionWithMetadata(context, descriptor.source.getPsi())
-            context.addDeclarationStatement(functionWithMetadata.makeStmt())
+            context.addDeclarationStatement(innerContext.wrapWithInlineMetadata(context, inlineFunction, descriptor).makeStmt())
         }
     }
 
