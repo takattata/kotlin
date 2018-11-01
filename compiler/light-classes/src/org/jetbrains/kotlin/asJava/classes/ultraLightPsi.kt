@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationUseSiteTarget
+import org.jetbrains.kotlin.descriptors.annotations.isInlineOnly
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens.*
 import org.jetbrains.kotlin.load.java.JvmAbi
@@ -385,7 +386,17 @@ class KtUltraLightClass(classOrObject: KtClassOrObject, private val support: Ult
                 fun KtDeclaration.isPrivate() =
                     hasModifier(PRIVATE_KEYWORD) ||
                             this is KtConstructor<*> && classOrObject.hasModifier(SEALED_KEYWORD) ||
-                            this is KtFunction && typeParameters.any { it.hasModifier(REIFIED_KEYWORD) }
+                            isInlineOnly()
+
+                private fun KtDeclaration.isInlineOnly(): Boolean {
+                    if (this !is KtCallableDeclaration || !hasModifier(INLINE_KEYWORD)) return false
+                    if (typeParameters.any { it.hasModifier(REIFIED_KEYWORD) }) return true
+                    if (annotationEntries.isEmpty()) return false
+
+                    val descriptor = resolve() as? CallableMemberDescriptor ?: return false
+
+                    return descriptor.isInlineOnly()
+                }
             }
         ).setConstructor(declaration is KtConstructor<*>)
     }
