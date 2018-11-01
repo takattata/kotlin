@@ -16,10 +16,9 @@
 
 package org.jetbrains.uast.kotlin
 
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiNamedElement
-import com.intellij.psi.PsiType
+import com.intellij.psi.*
+import com.intellij.psi.infos.CandidateInfo
+import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -39,7 +38,7 @@ class KotlinUFunctionCallExpression(
         override val psi: KtCallElement,
         givenParent: UElement?,
         private val _resolvedCall: ResolvedCall<*>?
-) : KotlinAbstractUExpression(givenParent), UCallExpressionEx, KotlinUElementWithType {
+) : KotlinAbstractUExpression(givenParent), UCallExpressionEx, KotlinUElementWithType, UMultiResolvable {
 
     constructor(psi: KtCallElement, uastParent: UElement?) : this(psi, uastParent, null)
 
@@ -130,6 +129,20 @@ class KotlinUFunctionCallExpression(
             }
 
         }
+
+    override fun multiResolve(): Iterable<ResolveResult> {
+        val contextElement = psi
+        val methodName = methodName ?: contextElement.calleeExpression?.text ?: return emptyList()
+        val calleeExpression = contextElement.calleeExpression ?: return emptyList()
+        val variants = getReferenceVariants(calleeExpression, methodName).asIterable()
+        return variants.flatMap {
+            when (val source = it.toSource()) {
+                is KtClass -> source.toLightClass()?.constructors?.toList().orEmpty()
+                else -> listOfNotNull(resolveSource(psi, it, source))
+            }
+        }.map { CandidateInfo(it, PsiSubstitutor.EMPTY) }
+    }
+
 
     override fun resolve(): PsiMethod? {
         val descriptor = resolvedCall?.resultingDescriptor ?: return null

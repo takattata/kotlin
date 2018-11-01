@@ -17,14 +17,18 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.PsiSubstitutor
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UMultiResolvable
 import org.jetbrains.uast.UQualifiedReferenceExpression
 
 class KotlinUSafeQualifiedExpression(
         override val psi: KtSafeQualifiedExpression,
         givenParent: UElement?
-) : KotlinAbstractUExpression(givenParent), UQualifiedReferenceExpression,
+) : KotlinAbstractUExpression(givenParent), UQualifiedReferenceExpression, UMultiResolvable,
         KotlinUElementWithType, KotlinEvaluatableUElement {
     override val receiver by lz { KotlinConverter.convertOrEmpty(psi.receiverExpression, this) }
     override val selector by lz { KotlinConverter.convertOrEmpty(psi.selectorExpression, this) }
@@ -34,4 +38,10 @@ class KotlinUSafeQualifiedExpression(
         get() = (resolve() as? PsiNamedElement)?.name
     
     override fun resolve() = psi.selectorExpression?.resolveCallToDeclaration(this)
+    override fun multiResolve(): Iterable<ResolveResult> = psi.selectorExpression?.let { ktExpression ->
+        getReferenceVariants(ktExpression, ktExpression.name ?: ktExpression.text)
+            .mapNotNull { descriptor ->
+                descriptor.toSource()?.getMaybeLightElement(this)?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) }
+            }.asIterable()
+    } ?: emptyList()
 }

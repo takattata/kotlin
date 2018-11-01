@@ -16,17 +16,21 @@
 
 package org.jetbrains.uast.kotlin
 
+import com.intellij.psi.PsiSubstitutor
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UIdentifier
+import org.jetbrains.uast.UMultiResolvable
 import org.jetbrains.uast.UThisExpression
 import org.jetbrains.uast.kotlin.declarations.KotlinUIdentifier
 
 class KotlinUThisExpression(
         override val psi: KtThisExpression,
         givenParent: UElement?
-) : KotlinAbstractUExpression(givenParent), UThisExpression, KotlinUElementWithType, KotlinEvaluatableUElement {
+) : KotlinAbstractUExpression(givenParent), UThisExpression, UMultiResolvable, KotlinUElementWithType, KotlinEvaluatableUElement {
     override val label: String?
         get() = psi.getLabelName()
 
@@ -34,4 +38,6 @@ class KotlinUThisExpression(
         get() = psi.getTargetLabel()?.let { KotlinUIdentifier(it, this) }
 
     override fun resolve() = psi.analyze()[BindingContext.LABEL_TARGET, psi.getTargetLabel()]
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 }

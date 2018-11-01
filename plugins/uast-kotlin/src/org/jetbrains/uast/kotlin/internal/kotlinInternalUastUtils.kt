@@ -25,6 +25,7 @@ import com.intellij.psi.impl.cache.TypeInfo
 import com.intellij.psi.impl.compiled.ClsTypeElementImpl
 import com.intellij.psi.impl.compiled.SignatureParsing
 import com.intellij.psi.impl.compiled.StubBuildingVisitor
+import com.intellij.psi.infos.CandidateInfo
 import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.kotlin.asJava.LightClassUtil
 import org.jetbrains.kotlin.asJava.elements.FakeFileForLightClass
@@ -76,6 +77,14 @@ internal fun DeclarationDescriptor.toSource(): PsiElement? {
         null
     }
 }
+
+internal fun KtElement.multiResolveResults(): Sequence<ResolveResult> =
+    references.asSequence().flatMap { ref ->
+        when (ref) {
+            is PsiPolyVariantReference -> ref.multiResolve(false).asSequence()
+            else -> (ref.resolve()?.let { sequenceOf(CandidateInfo(it, PsiSubstitutor.EMPTY)) }).orEmpty()
+        }
+    }
 
 internal fun resolveSource(context: KtElement, descriptor: DeclarationDescriptor, source: PsiElement?): PsiMethod? {
 
@@ -287,6 +296,9 @@ internal fun KtElement.analyze(): BindingContext {
     return ServiceManager.getService(project, KotlinUastResolveProviderService::class.java)
         ?.getBindingContext(this) ?: BindingContext.EMPTY
 }
+
+internal fun getReferenceVariants(ktElement: KtElement, nameHint: String): Sequence<DeclarationDescriptor> =
+    ServiceManager.getService(ktElement.project, KotlinUastResolveProviderService::class.java).getReferenceVariants(ktElement, nameHint)
 
 internal inline fun <reified T : UDeclaration, reified P : PsiElement> unwrap(element: P): P {
     val unwrapped = if (element is T) element.psi else element

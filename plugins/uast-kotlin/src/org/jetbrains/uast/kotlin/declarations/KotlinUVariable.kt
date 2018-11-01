@@ -17,6 +17,7 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.*
+import com.intellij.psi.infos.CandidateInfo
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.annotations.NotNull
@@ -112,7 +113,7 @@ abstract class AbstractKotlinUVariable(givenParent: UElement?) : KotlinAbstractU
 
     override fun equals(other: Any?) = other is AbstractKotlinUVariable && psi == other.psi
 
-    class WrappedUAnnotation(psiAnnotation: PsiAnnotation, override val uastParent: UElement) : UAnnotation, UAnchorOwner,
+    class WrappedUAnnotation(psiAnnotation: PsiAnnotation, override val uastParent: UElement) : UAnnotation, UAnchorOwner, UMultiResolvable,
         JvmDeclarationUElementPlaceholder {
 
         override val javaPsi: PsiAnnotation = psiAnnotation
@@ -139,6 +140,7 @@ abstract class AbstractKotlinUVariable(givenParent: UElement?) : KotlinAbstractU
         override fun findAttributeValue(name: String?): UExpression? = psi.findAttributeValue(name)?.let { toUExpression(it) }
         override fun findDeclaredAttributeValue(name: String?): UExpression? = psi.findDeclaredAttributeValue(name)?.let { toUExpression(it) }
         override fun resolve(): PsiClass? = psi.nameReferenceElement?.resolve() as? PsiClass
+        override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
     }
 
 }
@@ -234,7 +236,7 @@ class KotlinReceiverUParameter(
 }
 
 class KotlinNullabilityUAnnotation(val annotatedElement: PsiElement, override val uastParent: UElement) : UAnnotationEx, UAnchorOwner,
-    JvmDeclarationUElementPlaceholder {
+    UMultiResolvable, JvmDeclarationUElementPlaceholder {
 
     private fun getTargetType(annotatedElement: PsiElement): KotlinType? {
         if (annotatedElement is KtTypeReference) {
@@ -281,6 +283,8 @@ class KotlinNullabilityUAnnotation(val annotatedElement: PsiElement, override va
         val project = annotatedElement.project
         JavaPsiFacade.getInstance(project).findClass(it, GlobalSearchScope.allScope(project))
     }
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 
 }
 
@@ -380,7 +384,7 @@ class KotlinUEnumConstant(
         psi: PsiEnumConstant,
         override val sourcePsi: KtElement?,
         givenParent: UElement?
-) : AbstractKotlinUVariable(givenParent), UEnumConstant, UCallExpressionEx, PsiEnumConstant by psi {
+) : AbstractKotlinUVariable(givenParent), UEnumConstant, UCallExpressionEx, UMultiResolvable, PsiEnumConstant by psi {
 
     override val initializingClass: UClass? by lz {
         (psi.initializingClass as? KtLightClass)?.let { initializingClass ->
@@ -462,5 +466,7 @@ class KotlinUEnumConstant(
     }
 
     override fun getArgumentForParameter(i: Int): UExpression? = valueArguments.getOrNull(i)
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 
 }

@@ -16,9 +16,8 @@
 
 package org.jetbrains.uast.kotlin
 
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.*
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -102,7 +101,7 @@ open class KotlinUSimpleReferenceExpression(
         private val resolvedCall: ResolvedCall<*>,
         private val accessorDescriptor: DeclarationDescriptor,
         val setterValue: KtExpression?
-    ) : UCallExpressionEx, JvmDeclarationUElementPlaceholder {
+    ) : UCallExpressionEx, UMultiResolvable, JvmDeclarationUElementPlaceholder {
         override val methodName: String?
             get() = accessorDescriptor.name.asString()
 
@@ -161,6 +160,8 @@ open class KotlinUSimpleReferenceExpression(
             val source = accessorDescriptor.toSource()
             return resolveSource(psi, accessorDescriptor, source)
         }
+
+        override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
     }
 
     enum class ReferenceAccess(val isRead: Boolean, val isWrite: Boolean) {

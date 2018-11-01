@@ -17,6 +17,9 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.PsiSubstitutor
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.uast.*
@@ -25,7 +28,8 @@ import org.jetbrains.uast.kotlin.declarations.KotlinUIdentifier
 class KotlinUPostfixExpression(
         override val psi: KtPostfixExpression,
         givenParent: UElement?
-) : KotlinAbstractUExpression(givenParent), UPostfixExpression, KotlinUElementWithType, KotlinEvaluatableUElement, UResolvable {
+) : KotlinAbstractUExpression(givenParent), UPostfixExpression, KotlinUElementWithType, KotlinEvaluatableUElement,
+    UResolvable, UMultiResolvable {
     override val operand by lz { KotlinConverter.convertOrEmpty(psi.baseExpression, this) }
 
     override val operator = when (psi.operationToken) {
@@ -44,4 +48,6 @@ class KotlinUPostfixExpression(
         KtTokens.EXCLEXCL -> operand.tryResolve() as? PsiMethod
         else -> null
     }
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 }

@@ -17,7 +17,10 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.PsiSubstitutor
 import com.intellij.psi.PsiType
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
@@ -27,7 +30,7 @@ import org.jetbrains.uast.*
 class KotlinUObjectLiteralExpression(
     override val psi: KtObjectLiteralExpression,
     givenParent: UElement?
-) : KotlinAbstractUExpression(givenParent), UObjectLiteralExpression, UCallExpressionEx, KotlinUElementWithType {
+) : KotlinAbstractUExpression(givenParent), UObjectLiteralExpression, UCallExpressionEx, UMultiResolvable, KotlinUElementWithType {
 
     override val declaration: UClass by lz {
         psi.objectDeclaration.toLightClass()
@@ -83,5 +86,7 @@ class KotlinUObjectLiteralExpression(
         override val identifier: String
             get() = psi.name ?: "<error>"
     }
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 
 }

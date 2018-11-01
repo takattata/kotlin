@@ -17,6 +17,9 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiSubstitutor
+import com.intellij.psi.ResolveResult
+import com.intellij.psi.infos.CandidateInfo
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -24,12 +27,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UImportStatement
+import org.jetbrains.uast.UMultiResolvable
 import org.jetbrains.uast.USimpleNameReferenceExpression
 
 class KotlinUImportStatement(
         override val psi: KtImportDirective,
         givenParent: UElement?
-) : KotlinAbstractUElement(givenParent), UImportStatement {
+) : KotlinAbstractUElement(givenParent), UImportStatement, UMultiResolvable {
 
     override val javaPsi = null
 
@@ -67,4 +71,6 @@ class KotlinUImportStatement(
             return referenceTarget.toSource()?.getMaybeLightElement(this)
         }
     }
+
+    override fun multiResolve(): Iterable<ResolveResult> = listOfNotNull(resolve()?.let { CandidateInfo(it, PsiSubstitutor.EMPTY) })
 }
