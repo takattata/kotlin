@@ -67,7 +67,7 @@ val preparePluginXml by task<Copy> {
 
     val sinceBuild =
         if (clionVersion.matches(Regex("\\d+\\.\\d+"))) clionVersion else clionVersion.substring(0, clionVersion.lastIndexOf('.'))
-    val untilBuild = clionVersion.substring(0, clionVersion.indexOf('.')) + ".*"
+    val untilBuild = clionVersion.substring(0, clionVersion.lastIndexOf('.')) + ".*"
 
     filter {
         it.replace("<!--version_placeholder-->",
