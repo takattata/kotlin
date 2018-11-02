@@ -55,13 +55,6 @@ buildScan {
     setTermsOfServiceAgree("yes")
 }
 
-val configuredJdks: List<JdkId> =
-        getConfiguredJdks().also {
-            it.forEach {
-                logger.info("Using ${it.majorVersion} home: ${it.homeDir}")
-            }
-        }
-
 val defaultSnapshotVersion: String by extra
 val buildNumber by extra(findProperty("build.number")?.toString() ?: defaultSnapshotVersion)
 val kotlinVersion by extra(findProperty("deployVersion")?.toString() ?: buildNumber)
@@ -113,7 +106,7 @@ extra["JDK_9"] = jdkPath("9")
 extra["JDK_10"] = jdkPath("10")
 extra["JDK_11"] = jdkPath("11")
 
-gradle.taskGraph.beforeTask() {
+gradle.taskGraph.beforeTask {
     checkJDK()
 }
 
@@ -122,10 +115,18 @@ fun checkJDK() {
     if (jdkChecked) {
         return
     }
-    var unpresentJdks = JdkMajorVersion.values().filter { it.isMandatory() }.map { it -> it.name }.filter { it == null || extra[it] == jdkNotFoundConst }.toList()
+
+    val unpresentJdks =
+        JdkMajorVersion.values()
+        .filter { it.isMandatory() }
+        .map { it -> it.name }
+        .filter { extra[it] == jdkNotFoundConst }
+
     if (!unpresentJdks.isEmpty()) {
-        throw GradleException("Please set environment variable${if (unpresentJdks.size > 1) "s" else ""}: ${unpresentJdks.joinToString()} to point to corresponding JDK installation.")
+        throw GradleException("Please set environment variable${if (unpresentJdks.size > 1) "s" else ""}: " +
+                                      "${unpresentJdks.joinToString(", ")} to point to corresponding JDK installation.")
     }
+
     jdkChecked = true
 }
 
@@ -673,11 +674,9 @@ configure<IdeaModel> {
 }
 
 fun jdkPath(version: String): String {
-    val jdkName = "JDK_${version.replace(".", "")}"
-    val jdkMajorVersion = JdkMajorVersion.valueOf(jdkName)
-    return configuredJdks.find { it.majorVersion == jdkMajorVersion }?.homeDir?.canonicalPath?:jdkNotFoundConst
+    val jdkEnvVariableName = "JDK_${version.replace(".", "")}"
+    return System.getenv("${jdkEnvVariableName}_x64") ?: System.getenv(jdkEnvVariableName) ?: jdkNotFoundConst
 }
-
 
 fun Project.configureJvmProject(javaHome: String, javaVersion: String) {
     tasks.withType<JavaCompile> {
