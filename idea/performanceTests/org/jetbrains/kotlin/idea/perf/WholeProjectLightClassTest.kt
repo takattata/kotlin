@@ -64,4 +64,9 @@ class WholeProjectLightClassTest : WholeProjectPerformanceTest(), WholeProjectKo
 
         return PerFileTestResult(results, totalNs, errors)
     }
+
+    fun testUltraLightPerformance() {
+        forceUsingUltraLightClassesForTest()
+        testWholeProjectPerformance()
+    }
 }
