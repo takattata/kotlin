@@ -165,7 +165,7 @@ extra["intellijSeparateSdks"] = intellijSeparateSdks
 
 extra["IntellijCoreDependencies"] =
         listOf("annotations",
-               if (Ide.IJ191.orHigher.matches(IdeVersionConfigurator.currentIde)) "asm-all-7.0-beta" else "asm-all",
+               if (Ide.IJ191.orHigher()) "asm-all-7.0-beta" else "asm-all",
                "guava",
                "jdom",
                "jna",
