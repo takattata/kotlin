@@ -202,6 +202,7 @@ class GradleScriptDefinitionsContributor(private val project: Project) : ScriptD
 
         val gradleHome = gradleExeSettings.gradleHome ?: error("Unable to get Gradle home directory")
 
+
         val gradleLibDir = File(gradleHome, "lib").let {
             it.takeIf { it.exists() && it.isDirectory } ?: error("Invalid Gradle libraries directory $it")
         }
