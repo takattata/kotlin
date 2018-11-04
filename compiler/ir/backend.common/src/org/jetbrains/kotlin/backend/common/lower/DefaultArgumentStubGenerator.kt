@@ -378,7 +378,7 @@ private fun IrFunction.generateDefaultsFunctionImpl(context: CommonBackendContex
     val newFunction = buildFunctionDeclaration(this, origin)
 
     val syntheticParameters = MutableList((valueParameters.size + 31) / 32) { i ->
-        valueParameter(valueParameters.size + i, parameterMaskName(i), context.irBuiltIns.intType)
+        newFunction.valueParameter(valueParameters.size + i, parameterMaskName(i), context.irBuiltIns.intType)
     }
 
     if (this is IrConstructor) {
@@ -443,7 +443,7 @@ private fun buildFunctionDeclaration(irFunction: IrFunction, origin: IrDeclarati
                 IrSimpleFunctionSymbolImpl(descriptor),
                 name,
                 irFunction.visibility,
-                Modality.FINAL,
+                if (irFunction.modality === Modality.ABSTRACT) Modality.OPEN else irFunction.modality,
                 irFunction.isInline,
                 false,
                 false,
