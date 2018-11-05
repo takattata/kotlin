@@ -1745,7 +1745,7 @@ public class KotlinTypeMapper {
             return null;
         }
 
-        if (descriptor instanceof VariableDescriptor && isVarCapturedInClosure(bindingContext, descriptor)) {
+        if (descriptor instanceof VariableDescriptor && isVarCapturedInClosure(bindingContext, descriptor, false)) {
             return StackValue.sharedTypeForType(mapType(((VariableDescriptor) descriptor).getType()));
         }
 

@@ -198,10 +198,10 @@ public class BindingContextUtils {
         return expression instanceof KtReferenceExpression;
     }
 
-    public static boolean isVarCapturedInClosure(BindingContext bindingContext, DeclarationDescriptor descriptor) {
+    public static boolean isVarCapturedInClosure(BindingContext bindingContext, DeclarationDescriptor descriptor, Boolean b) {
         if (!(descriptor instanceof VariableDescriptor) || descriptor instanceof PropertyDescriptor) return false;
         VariableDescriptor variableDescriptor = (VariableDescriptor) descriptor;
-        return bindingContext.get(CAPTURED_IN_CLOSURE, variableDescriptor) != null && variableDescriptor.isVar();
+        return bindingContext.get(CAPTURED_IN_CLOSURE, variableDescriptor) != null && (b || variableDescriptor.isVar());
     }
 
     @NotNull

@@ -67,7 +67,7 @@ public abstract class AssignmentTranslator extends AbstractTranslator {
     }
 
     protected final AccessTranslator createAccessTranslator(@NotNull KtExpression left, boolean forceOrderOfEvaluation) {
-        if (isValProperty(left, context())) {
+        if (isValProperty(left, context()) && false) {
             KtSimpleNameExpression simpleName = getSimpleName(left);
             assert simpleName != null;
             return BackingFieldAccessTranslator.newInstance(simpleName, context());

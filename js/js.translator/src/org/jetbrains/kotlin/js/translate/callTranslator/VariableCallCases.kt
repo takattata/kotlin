@@ -87,7 +87,7 @@ object DefaultVariableAccessCase : VariableAccessCase() {
         }
 
         val functionRef = ReferenceTranslator.translateAsValueReference(callableDescriptor, context)
-        val ref = if (isVarCapturedInClosure(context.bindingContext(), callableDescriptor)) {
+        val ref = if (isVarCapturedInClosure(context.bindingContext(), callableDescriptor, callableDescriptor is LocalVariableDescriptor)) {
             getCapturedVarAccessor(functionRef)
         }
         else {

@@ -3026,7 +3026,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
     public int indexOfLocalNotDelegated(KtReferenceExpression lhs) {
         DeclarationDescriptor declarationDescriptor = bindingContext.get(REFERENCE_TARGET, lhs);
-        if (isVarCapturedInClosure(bindingContext, declarationDescriptor)) {
+        if (isVarCapturedInClosure(bindingContext, declarationDescriptor, false)) {
             return -1;
         }
         if (declarationDescriptor instanceof LocalVariableDescriptor && ((LocalVariableDescriptor) declarationDescriptor).isDelegated()) {

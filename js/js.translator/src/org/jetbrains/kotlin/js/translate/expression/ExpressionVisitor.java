@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor;
 import org.jetbrains.kotlin.descriptors.annotations.KotlinRetention;
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.kotlin.js.backend.ast.*;
 import org.jetbrains.kotlin.js.backend.ast.metadata.MetadataProperties;
 import org.jetbrains.kotlin.js.naming.NameSuggestion;
@@ -244,7 +245,7 @@ public final class ExpressionVisitor extends TranslatorVisitor<JsNode> {
             initializer = PropertyTranslatorKt.translateDelegateOrInitializerExpression(context, expression);
             assert initializer != null : "Initializer must be non-null for property with delegate";
         }
-        else if (isVarCapturedInClosure(context.bindingContext(), descriptor)) {
+        else if (isVarCapturedInClosure(context.bindingContext(), descriptor, descriptor instanceof LocalVariableDescriptor)) {
             JsNameRef alias = getCapturedVarAccessor(name.makeRef());
             initializer = JsAstUtils.wrapValue(alias, initializer == null ? new JsNullLiteral() : initializer);
         }

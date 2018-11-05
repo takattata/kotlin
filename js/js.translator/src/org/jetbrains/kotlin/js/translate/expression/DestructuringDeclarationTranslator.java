@@ -87,7 +87,7 @@ public class DestructuringDeclarationTranslator extends AbstractTranslator {
             entryInitializer = TranslationUtils.coerce(context(), entryInitializer, descriptor.getType());
 
             JsName name = context().getNameForDescriptor(descriptor);
-            if (isVarCapturedInClosure(context().bindingContext(), descriptor)) {
+            if (isVarCapturedInClosure(context().bindingContext(), descriptor, false)) {
                 JsNameRef alias = getCapturedVarAccessor(name.makeRef());
                 entryInitializer = JsAstUtils.wrapValue(alias, entryInitializer);
             }
