@@ -39,11 +39,6 @@ public class CommonDecompiledTextFromJsMetadataTestGenerated extends AbstractCom
         runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInEnumConstructor/");
     }
 
-    @TestMetadata("AnnotatedParameterInGenericInnerClassConstructor")
-    public void testAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-        runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor/");
-    }
-
     @TestMetadata("AnnotatedParameterInInnerClassConstructor")
     public void testAnnotatedParameterInInnerClassConstructor() throws Exception {
         runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInInnerClassConstructor/");
@@ -162,19 +157,6 @@ public class CommonDecompiledTextFromJsMetadataTestGenerated extends AbstractCom
 
         public void testAllFilesPresentInAnnotatedParameterInEnumConstructor() throws Exception {
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/decompiler/decompiledText/AnnotatedParameterInEnumConstructor"), Pattern.compile("^([^\\.]+)$"), TargetBackend.JS, true);
-        }
-    }
-
-    @TestMetadata("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor")
-    @TestDataPath("$PROJECT_ROOT")
-    @RunWith(JUnit3RunnerWithInners.class)
-    public static class AnnotatedParameterInGenericInnerClassConstructor extends AbstractCommonDecompiledTextFromJsMetadataTest {
-        private void runTest(String testDataFilePath) throws Exception {
-            KotlinTestUtils.runTest(this::doTest, TargetBackend.JS, testDataFilePath);
-        }
-
-        public void testAllFilesPresentInAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor"), Pattern.compile("^([^\\.]+)$"), TargetBackend.JS, true);
         }
     }
 

@@ -39,11 +39,6 @@ public class CommonDecompiledTextTestGenerated extends AbstractCommonDecompiledT
         runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInEnumConstructor/");
     }
 
-    @TestMetadata("AnnotatedParameterInGenericInnerClassConstructor")
-    public void testAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-        runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor/");
-    }
-
     @TestMetadata("AnnotatedParameterInInnerClassConstructor")
     public void testAnnotatedParameterInInnerClassConstructor() throws Exception {
         runTest("idea/testData/decompiler/decompiledText/AnnotatedParameterInInnerClassConstructor/");
@@ -167,19 +162,6 @@ public class CommonDecompiledTextTestGenerated extends AbstractCommonDecompiledT
 
         public void testAllFilesPresentInAnnotatedParameterInEnumConstructor() throws Exception {
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/decompiler/decompiledText/AnnotatedParameterInEnumConstructor"), Pattern.compile("^([^\\.]+)$"), TargetBackend.ANY, true);
-        }
-    }
-
-    @TestMetadata("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor")
-    @TestDataPath("$PROJECT_ROOT")
-    @RunWith(JUnit3RunnerWithInners.class)
-    public static class AnnotatedParameterInGenericInnerClassConstructor extends AbstractCommonDecompiledTextTest {
-        private void runTest(String testDataFilePath) throws Exception {
-            KotlinTestUtils.runTest(this::doTest, TargetBackend.ANY, testDataFilePath);
-        }
-
-        public void testAllFilesPresentInAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/decompiler/decompiledText/AnnotatedParameterInGenericInnerClassConstructor"), Pattern.compile("^([^\\.]+)$"), TargetBackend.ANY, true);
         }
     }
 

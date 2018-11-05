@@ -4,6 +4,10 @@
 package test
 
 public final class AnnotatedParameterInInnerClassConstructor public constructor() {
-    public final inner class Inner public constructor(@test.Anno a: kotlin.String, @test.Anno b: kotlin.String) {
+    public final inner class Inner public constructor(@test.AnnoA a: kotlin.String, @test.AnnoB b: kotlin.String) {
+    }
+
+    public final inner class InnerGeneric<T> public constructor(@test.AnnoA a: T, @test.AnnoB b: kotlin.String) {
     }
 }
+

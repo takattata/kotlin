@@ -34,11 +34,6 @@ public class UltraLightClassSanityTestGenerated extends AbstractUltraLightClassS
         runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInEnumConstructor.kt");
     }
 
-    @TestMetadata("AnnotatedParameterInGenericInnerClassConstructor.kt")
-    public void testAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-        runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInGenericInnerClassConstructor.kt");
-    }
-
     @TestMetadata("AnnotatedParameterInInnerClassConstructor.kt")
     public void testAnnotatedParameterInInnerClassConstructor() throws Exception {
         runTest("compiler/testData/asJava/lightClasses/AnnotatedParameterInInnerClassConstructor.kt");

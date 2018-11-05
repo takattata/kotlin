@@ -15,13 +15,13 @@ PsiJetFileStubImpl[package=test]
           VALUE_PARAMETER_LIST
             VALUE_PARAMETER[fqName=null, hasDefaultValue=false, hasValOrVar=false, isMutable=false, name=a]
               MODIFIER_LIST[]
-                ANNOTATION_ENTRY[hasValueArguments=false, shortName=Anno]
+                ANNOTATION_ENTRY[hasValueArguments=false, shortName=AnnoA]
                   CONSTRUCTOR_CALLEE
                     TYPE_REFERENCE
                       USER_TYPE
                         USER_TYPE
                           REFERENCE_EXPRESSION[referencedName=test]
-                        REFERENCE_EXPRESSION[referencedName=Anno]
+                        REFERENCE_EXPRESSION[referencedName=AnnoA]
               TYPE_REFERENCE
                 USER_TYPE
                   USER_TYPE
@@ -29,13 +29,47 @@ PsiJetFileStubImpl[package=test]
                   REFERENCE_EXPRESSION[referencedName=String]
             VALUE_PARAMETER[fqName=null, hasDefaultValue=false, hasValOrVar=false, isMutable=false, name=b]
               MODIFIER_LIST[]
-                ANNOTATION_ENTRY[hasValueArguments=false, shortName=Anno]
+                ANNOTATION_ENTRY[hasValueArguments=false, shortName=AnnoB]
                   CONSTRUCTOR_CALLEE
                     TYPE_REFERENCE
                       USER_TYPE
                         USER_TYPE
                           REFERENCE_EXPRESSION[referencedName=test]
-                        REFERENCE_EXPRESSION[referencedName=Anno]
+                        REFERENCE_EXPRESSION[referencedName=AnnoB]
+              TYPE_REFERENCE
+                USER_TYPE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION[referencedName=kotlin]
+                  REFERENCE_EXPRESSION[referencedName=String]
+        CLASS_BODY
+      CLASS[fqName=test.AnnotatedParameterInInnerClassConstructor.InnerGeneric, isEnumEntry=false, isInterface=false, isLocal=false, isTopLevel=false, name=InnerGeneric, superNames=[]]
+        MODIFIER_LIST[inner public final]
+        TYPE_PARAMETER_LIST
+          TYPE_PARAMETER[fqName=null, isInVariance=false, isOutVariance=false, name=T]
+        PRIMARY_CONSTRUCTOR
+          MODIFIER_LIST[public]
+          VALUE_PARAMETER_LIST
+            VALUE_PARAMETER[fqName=null, hasDefaultValue=false, hasValOrVar=false, isMutable=false, name=a]
+              MODIFIER_LIST[]
+                ANNOTATION_ENTRY[hasValueArguments=false, shortName=AnnoA]
+                  CONSTRUCTOR_CALLEE
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        USER_TYPE
+                          REFERENCE_EXPRESSION[referencedName=test]
+                        REFERENCE_EXPRESSION[referencedName=AnnoA]
+              TYPE_REFERENCE
+                USER_TYPE
+                  REFERENCE_EXPRESSION[referencedName=T]
+            VALUE_PARAMETER[fqName=null, hasDefaultValue=false, hasValOrVar=false, isMutable=false, name=b]
+              MODIFIER_LIST[]
+                ANNOTATION_ENTRY[hasValueArguments=false, shortName=AnnoB]
+                  CONSTRUCTOR_CALLEE
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        USER_TYPE
+                          REFERENCE_EXPRESSION[referencedName=test]
+                        REFERENCE_EXPRESSION[referencedName=AnnoB]
               TYPE_REFERENCE
                 USER_TYPE
                   USER_TYPE

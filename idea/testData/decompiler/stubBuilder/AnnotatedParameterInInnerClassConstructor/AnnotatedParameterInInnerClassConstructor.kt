@@ -1,10 +1,16 @@
 package test
 
-annotation class Anno(val x: String)
+annotation class AnnoA
+annotation class AnnoB
 
 class AnnotatedParameterInInnerClassConstructor {
 
-    inner class Inner(@Anno("a") a: String, @Anno("b") b: String) {
+    inner class Inner(@AnnoA a: String, @AnnoB b: String) {
+
+    }
+
+    inner class InnerGeneric<T>(@AnnoA a: T, @AnnoB
+    b: String) {
 
     }
 }

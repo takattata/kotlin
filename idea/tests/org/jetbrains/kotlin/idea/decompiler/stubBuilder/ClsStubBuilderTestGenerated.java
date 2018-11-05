@@ -39,11 +39,6 @@ public class ClsStubBuilderTestGenerated extends AbstractClsStubBuilderTest {
         runTest("idea/testData/decompiler/stubBuilder/AnnotatedParameterInEnumConstructor/");
     }
 
-    @TestMetadata("AnnotatedParameterInGenericInnerClassConstructor")
-    public void testAnnotatedParameterInGenericInnerClassConstructor() throws Exception {
-        runTest("idea/testData/decompiler/stubBuilder/AnnotatedParameterInGenericInnerClassConstructor/");
-    }
-
     @TestMetadata("AnnotatedParameterInInnerClassConstructor")
     public void testAnnotatedParameterInInnerClassConstructor() throws Exception {
         runTest("idea/testData/decompiler/stubBuilder/AnnotatedParameterInInnerClassConstructor/");

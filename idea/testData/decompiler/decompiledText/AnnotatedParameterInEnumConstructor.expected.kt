@@ -3,6 +3,7 @@
 
 package test
 
-public final enum class AnnotatedParameterInEnumConstructor private constructor(@test.Anno a: kotlin.String, @test.Anno b: kotlin.String) : kotlin.Enum<test.AnnotatedParameterInEnumConstructor> {
+public final enum class AnnotatedParameterInEnumConstructor private constructor(@test.AnnoA a: kotlin.String, @test.AnnoB b: kotlin.String) : kotlin.Enum<test.AnnotatedParameterInEnumConstructor> {
     A;
 }
+
